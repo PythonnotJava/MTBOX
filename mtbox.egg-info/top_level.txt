@@ -1,3 +1,0 @@
-CodeViewer
-Setting
-TreeItems
