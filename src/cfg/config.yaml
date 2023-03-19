@@ -1,0 +1,16 @@
+Lang: ch
+Main:
+  sizes:
+  - 1200
+  - 800
+QFont:
+  family: "\u9ED1\u4F53"
+  size: 16
+QGroupBox:
+  max-height: 350
+QSplitter:
+  sizes:
+  - 100
+  - 1000
+Theme:
+  name: dark_lightgreen.xml

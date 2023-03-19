@@ -1,0 +1,17 @@
+QWidget {
+    font-size : 16px;
+    font-weight : 900;
+    font-family : 微软雅黑;
+    color : black;
+}
+
+QLineEdit {
+    qproperty-alignment: AlignHCenter;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 3px;
+    qproperty-titleAlign: center;
+}

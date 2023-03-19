@@ -1,0 +1,13 @@
+setup.py
+CodeViewer/CodeViewer.py
+CodeViewer/__init__.py
+Setting/Settings.py
+Setting/__init__.py
+Setting/_load_or_dump_config.py
+TreeItems/__init__.py
+TreeItems/basetree.py
+mtbox.egg-info/PKG-INFO
+mtbox.egg-info/SOURCES.txt
+mtbox.egg-info/dependency_links.txt
+mtbox.egg-info/entry_points.txt
+mtbox.egg-info/top_level.txt

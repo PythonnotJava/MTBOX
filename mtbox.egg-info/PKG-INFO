@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: mtbox
+Version: 1.0
+Summary: A matplotlib toolbox dedicated to quick start and easy expansion, based on pyqt.
+Author: PythonnotJava
