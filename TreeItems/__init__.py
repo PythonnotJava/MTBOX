@@ -1,1 +1,1 @@
-from .basetree import BaseTree
+from .basetree import BaseTree as BaseTree
