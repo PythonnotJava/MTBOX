@@ -79,3 +79,6 @@ if __name__ == '__main__':
 * Try optimizing the right column with a split column. Can customize height display
 * Bug detection and processing functions
 * More and more comprehensive matplotlib_tutorial tutorial
+
+## Offset track from future
+### Sometimes I think that matbox may no longer be a tutorial library for Matplotlib in the future (if you invest a lot of energy in maintenance, it will definitely have qualitative innovation), but more like a bookmark library. Developers or Users can use the left side as different levels of title columns, and on the right side, at least something about the tab title and sub-tab content, even notes, notes, etc. What's more, according to the interface, a function of converting the interface to PDF format (or other formats) can be developed, and then follow the association, no! It's an idea...
