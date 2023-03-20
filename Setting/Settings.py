@@ -1,8 +1,11 @@
 import sys
+from pathlib import Path
 from PyQt5.QtGui import QWheelEvent
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtBoundSignal
 from qt_material import list_themes
 from PyQt5.QtWidgets import QLabel, QApplication, QVBoxLayout, QDialog, QHBoxLayout, QComboBox, QRadioButton
+
+_path = Path(__file__).parent
 
 if __name__ == '__main__':
     from _load_or_dump_config import _load_yaml
@@ -70,16 +73,13 @@ class ReSetDiag(QDialog):
         self.themeComboBox.wheelEvent = _wheelEvent
         self.themeComboBox.currentTextChanged.connect(self.themeChanged)
         self.setMaximumWidth(400)
-        if __name__ == "__main__" : path = '../src/cfg/config.yaml'
-        else: path = 'src/cfg/config.yaml'
+        path = _path / "../" / "Source" / "cfg" / "config.yaml"
         if _load_yaml(path)['Lang'] == 'ch' : self.languageCh.setChecked(True)
         elif _load_yaml(path)['Lang'] == 'en' : self.languageEn.setChecked(True)
         else : pass
 
     # theme signal linked
-    def themeChanged(self):
-        # print(self.themeComboBox.currentText())
-        self.curTheme.emit(self.themeComboBox.currentText())
+    def themeChanged(self): self.curTheme.emit(self.themeComboBox.currentText())
 
 
 if __name__ == '__main__':
