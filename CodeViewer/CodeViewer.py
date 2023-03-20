@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QTextOption
 from qutepart import Qutepart
@@ -20,9 +21,8 @@ class ViewSeletedItemCodes(Qutepart):
     # Each file starts with the image name and ends with md
     @staticmethod
     def getCodes(itemName : str):
-        if __name__ == '__main__' : path = '../src/tutorial/{}.md'.format(itemName)
-        else: path = 'src/tutorial/{}.md'.format(itemName)
-        # path = os.path.abspath(path)
+        _path = Path(__file__).parent
+        path = _path / ".." / "Source" / "tutorial" / '{}.md'.format(itemName)
         print(path)
         _f = open(path, 'r', encoding='U8')
         _codes = _f.read()[len("```python") : len(_f.read())-len('```')]
