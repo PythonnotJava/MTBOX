@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 from PyQt5.QtWidgets import (QApplication,
                              QWidget,
                              QPushButton,
@@ -14,12 +15,14 @@ from PyQt5.QtWidgets import (QApplication,
 from PyQt5.QtGui import QCursor, QPixmap, QCloseEvent, QIcon
 from PyQt5.QtCore import Qt
 from qt_material import apply_stylesheet
-from Setting._load_or_dump_config import _load_yaml, _dump_new_cfg
-from TreeItems.basetree import BaseTree
-from CodeViewer.CodeViewer import ViewSeletedItemCodes
-from Setting.Settings import ReSetDiag
+from matbox.Setting._load_or_dump_config import _load_yaml, _dump_new_cfg
+from matbox.TreeItems.basetree import BaseTree
+from matbox.CodeViewer.CodeViewer import ViewSeletedItemCodes
+from matbox.Setting.Settings import ReSetDiag
 
 __author__ = "PythonnotJava"
+
+_path = Path(__file__).parent
 
 class MatTutorial(QWidget):
     def __init__(self):
@@ -49,7 +52,8 @@ class MatTutorial(QWidget):
         self.total_lay = QVBoxLayout()
 
         # config_datas
-        self._config_datas = _load_yaml('src/cfg/config.yaml')
+        path = _path / "Source" / "cfg" / "config.yaml"
+        self._config_datas = _load_yaml(path)
 
         self.setUI()
         self.load_optimization()
@@ -58,6 +62,9 @@ class MatTutorial(QWidget):
         # initialize window
         self.setMinimumSize(*self._config_datas['Main']['sizes'])
         self.setWindowTitle("Matplotlib-Tutorial")
+        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+        QApplication.setApplicationDisplayName("Version 1.0")
+        QApplication.setWindowIcon(QIcon(str(_path / 'Source' / 'img' / 'logo.ico')))
 
         # set layouts
         self.left_lay.addWidget(self.left_listBox)
@@ -90,8 +97,8 @@ class MatTutorial(QWidget):
         self.setting.clicked.connect(self._settings)
 
         # theme
-        apply_stylesheet(self, "src/themes/{}".format(self._config_datas['Theme']['name']))
-        apply_stylesheet(self._set, "src/themes/{}".format(self._config_datas['Theme']['name']))
+        apply_stylesheet(self, self._config_datas['Theme']['name'])
+        apply_stylesheet(self._set, self._config_datas['Theme']['name'])
         self.title_show.setStyleSheet("qproperty-alignment: AlignHCenter; font-size : 16px;")
         self.right_tutorial_group.setStyleSheet("""
         QGroupBox::title {
@@ -106,18 +113,18 @@ class MatTutorial(QWidget):
         ))
         # The temporary setting parameter detailed interface is fixed
         self.right_tutorial.setLineWrapMode(QTextEdit.NoWrap)
-        self.right_tutorial.setText(
-            open('src/tutorial/Matplotlib_Getting_Started_Tutorial_Ch.py', 'r', encoding='U8').read())
+        path = _path / "Source" / "tutorial" / "Matplotlib_Getting_Started_Tutorial_Ch.py"
+        self.right_tutorial.setText(open(path, 'r', encoding='U8').read())
 
     # UI beautification
     def load_optimization(self):
-        self.setCursor(QCursor(QPixmap("src/mouseCursor/working.cur")))
-        handle : QSplitterHandle = self.mid_spliter.handle(1)
+        self.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'working.cur'))))
+        handle: QSplitterHandle = self.mid_spliter.handle(1)
         handle.setMinimumWidth(10)
-        handle.setCursor(QCursor(QPixmap("src/mouseCursor/move.cur")))
-        self.runCode.setCursor(QCursor(QPixmap("src/mouseCursor/link.cur")))
-        self.setting.setCursor(QCursor(QPixmap('src/mouseCursor/link.cur')))
-        self.right_editor.setCursor(QCursor(QPixmap('src/mouseCursor/text.cur')))
+        handle.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'move.cur'))))
+        self.runCode.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'link.cur'))))
+        self.setting.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'link.cur'))))
+        self.right_editor.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'text.cur'))))
 
     # run code function -- which is connected with the button runCode
     def _runCode(self):
@@ -139,13 +146,13 @@ class MatTutorial(QWidget):
     def closeEvent(self, a0 : QCloseEvent):
         # When you close the main Ui firstly, the setting UI must also be closed
         if self.close(): self._set.close()
-        _dump_new_cfg("src/cfg/config.yaml", self._config_datas)
+        _dump_new_cfg(_path / "Source" / "cfg" / "config.yaml", self._config_datas)
 
 def main():
     app = QApplication(sys.argv)
-    app.setAttribute(Qt.AA_EnableHighDpiScaling)
-    app.setApplicationDisplayName("Version 1.0")
-    app.setWindowIcon(QIcon('src/img/logo.ico'))
+    # app.setAttribute(Qt.AA_EnableHighDpiScaling)
+    # app.setApplicationDisplayName("Version 1.0")
+    # app.setWindowIcon(QIcon('source/img/logo.ico'))
     ui = MatTutorial()
     ui.show()
     sys.exit(app.exec())
