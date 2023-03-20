@@ -1,1 +1,1 @@
-from .CodeViewer import ViewSeletedItemCodes
+from .CodeViewer import ViewSeletedItemCodes as ViewSeletedItemCodes
