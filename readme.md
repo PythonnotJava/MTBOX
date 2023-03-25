@@ -1,3 +1,9 @@
+# PyPi 链接 : https://pypi.org/project/matbox/1.0.7/
+
+# 快速安装
+```
+pip install matbox==1.0.7
+```
 
 # MatBox 1.0.7 版本
 
@@ -10,7 +16,9 @@
 from MT import main
 main()
 ```
-<img src="">
+![屏幕截图 2023-03-25 232252](https://user-images.githubusercontent.com/88701385/227726415-56912def-88ae-4d3c-bbca-d3624310f8a2.png)
+
+
 
 ## 自定义版
 ```python
@@ -39,7 +47,9 @@ if __name__ == '__main__':
     sys.exit(app.exec())
 
 ```
-<img src="">
+![屏幕截图 2023-03-25 190019](https://user-images.githubusercontent.com/88701385/227726435-de5c385d-3736-4c6b-8ff7-8de696a986b4.png)
+
+
 #### 备注 ： 字体大是因为自定义的qss
 
 # 继承关系与类的核心方法
