@@ -2,17 +2,18 @@ from setuptools import setup, find_packages
 
 setup(
     name='matbox',
-    version='1.0.6',
+    version='1.0.7',
     packages= find_packages(),
     include_package_data=True,
     package_data={
         'matbox': [
-            'src/cfg/*.yaml',
-            'src/img/*.ico',
-            'src/mouseCursor/*.cur',
-            'src/QSS/*.qss',
-            'src/tutorial/*.md',
-            'src/tutorial/*.py'
+            'Source/cfg/*.yaml',
+            'Source/img/*.ico',
+            'Source/mouseCursor/*.cur',
+            'Source/QSS/*.qss',
+            'Source/tutorial/*.mtml',
+            'Source/h5/*.html',
+            'Source/h5/*.svg',
         ]
 
     },
@@ -22,7 +23,8 @@ setup(
         'pyyaml',
         'qt_material',
         'numpy',
-        'matplotlib'
+        'matplotlib',
+        'PyQtWebEngine'
     ],
     entry_points={
         'console_scripts': [

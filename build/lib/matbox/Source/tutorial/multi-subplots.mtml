@@ -1,0 +1,54 @@
+
+            <editor style="font-size: 24px;color: darkblue;">
+                <code format=".py">
+                    
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 创建数据
+x = np.linspace(0, 10, 100)
+y1 = np.sin(x)
+y2 = np.cos(x)
+y3 = np.tan(x)
+y4 = np.exp(x)
+y5 = np.log(x + 1)
+y6 = np.sqrt(x)
+
+# 创建3x2的图
+fig, axs = plt.subplots(3, 2)
+
+# 绘制子图
+axs[0, 0].plot(x, y1)
+axs[0, 0].set_title('sin(x)')
+axs[0, 1].plot(x, y2)
+axs[0, 1].set_title('cos(x)')
+axs[1, 0].plot(x, y3)
+axs[1, 0].set_title('tan(x)')
+axs[1, 1].plot(x, y4)
+axs[1, 1].set_title('exp(x)')
+axs[2, 0].plot(x, y5)
+axs[2, 0].set_title('log(x+1)')
+axs[2, 1].plot(x, y6)
+axs[2, 1].set_title('sqrt(x)')
+
+# 调整子图之间的间距
+plt.subplots_adjust(hspace=0.4)
+
+# 显示图像
+plt.show()
+
+
+                </code>
+            </editor>
+
+            <details style="font-size: 16px;color: darkblue;">
+                <line>
+                    <parameter>multi-subplots</parameter>
+                    <function>multi-subplots</function>
+                </line>
+                <line>
+                    <parameter>multi-subplots</parameter>
+                    <function>multi-subplots</function>
+                </line>
+            </details>
+            

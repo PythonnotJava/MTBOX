@@ -57,7 +57,8 @@ class ReSetDiag(QDialog):
         # basic attributes
         self.themeComboBox.addItems(list_themes())
         _text = """
-        <pre>
+        <pre>                    
+        Here is MatBox V 1.0.7.
         Thank you for your trust in Matplotlib Tutorial
         (hereinafter referred to as MT).
         MT is a tool developed based on Python and designed 
@@ -80,7 +81,6 @@ class ReSetDiag(QDialog):
 
     # theme signal linked
     def themeChanged(self): self.curTheme.emit(self.themeComboBox.currentText())
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
