@@ -16,7 +16,7 @@ pip install matbox==1.0.7
 from MT import main
 main()
 ```
-![屏幕截图 2023-03-25 232252](https://user-images.githubusercontent.com/88701385/227726415-56912def-88ae-4d3c-bbca-d3624310f8a2.png)
+![屏幕截图 2023-03-25 232252](https://user-images.githubusercontent.com/88701385/227726669-8cf66a25-22c5-4e17-a5ba-5866bda290f6.png)
 
 
 
