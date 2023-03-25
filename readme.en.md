@@ -1,3 +1,10 @@
+# PyPi link: https://pypi.org/project/matbox/1.0.7/
+
+# quick install
+```
+pip install matbox==1.0.7
+```
+
 # MatBox version 1.0.7
 
 ## Starting from MatBox (hereinafter referred to as MT) 1.0.7, users can choose whether to use the default or custom interface. Even if it is the default, users can still customize it, and provide a friendly method for building
@@ -9,7 +16,9 @@
 from MT import main
 main()
 ```
-<img src="">
+![Screenshot 2023-03-25 232252](https://user-images.githubusercontent.com/88701385/227726415-56912def-88ae-4d3c-bbca-d3624310f8a2.png)
+
+
 
 ## Custom version
 ```python
@@ -38,7 +47,9 @@ if __name__ == '__main__':
      sys. exit(app. exec())
 
 ```
-<img src="">
+![Screenshot 2023-03-25 190019](https://user-images.githubusercontent.com/88701385/227726435-de5c385d-3736-4c6b-8ff7-8de696a986b4.png)
+
+
 #### Remarks: The font is large because of the custom qss
 
 # Inheritance relationship and the core method of the class
@@ -101,7 +112,7 @@ if __name__ == '__main__':
 
 ### item_clicked(index: QModelIndex), is the core function that links most of the controls under MT. I don't want users to operate it. Its core function is to send the node name to the signal when the user clicks on the child node
 
-## ComingHome(QWidget)
+## ComingHome(QWidget
 
 ### Since version 1.0.7, MT has provided the main interface, and ComingHome is essentially a webpage embedded in the UI interface
 
