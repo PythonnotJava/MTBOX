@@ -1,3 +1,8 @@
+# Anecdote before development:
+## When I started to write the 1.0.7 version, it was in a public class called employment guidance. At that time, I was having a headache when it was more convenient to build and change functions from 1.0.6, and my Around, especially behind, there are rows of female students sitting. I know that even though I am well aware of the shallowness of my current technology, I must show my hand in front of a bunch of female students who have nothing to do with computer majors and probably do not understand code. . So, I wrote down the first improvement about the code, related readme documents, and then the second, third... When I returned to the dormitory on the night road, I felt that the efficiency was very high at that time, and it was difficult to For the whole job, I just played it arbitrarily, so I have version 1.0.7
+
+# Ok, no kidding, let's get to the point
+
 # PyPi link: https://pypi.org/project/matbox/1.0.7/
 
 # quick install
