@@ -3,6 +3,10 @@
 
 # Ok, no kidding, let's get to the point
 
+# Bilibili demo address: https://www.bilibili.com/video/BV12v4y1G7iD/?spm_id_from=333.999.0.0&vd_source=9ab64e93362442ee5ac84c1c2078f8e7
+
+# YouTube demo address: https://youtu.be/hOW51iAL2eg
+
 # PyPi link: https://pypi.org/project/matbox/1.0.7/
 
 # quick install
