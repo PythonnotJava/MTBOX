@@ -135,4 +135,6 @@ if __name__ == '__main__':
 
 ### themeChanged()函数是在用户改变了主题时连接信号
 
+# 关于当前matbox的整体布局，注意，total_lay是全局布局
 
+<img alt="" src="https://github.com/PythonnotJava/MTBOX/blob/matbox1.0.7/Layout-Show-Img/layout.png?raw=true"/>
