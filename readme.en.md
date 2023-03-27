@@ -134,3 +134,6 @@ if __name__ == '__main__':
 ### ReSetDiag is the implementation of the setting interface, currently only supports changing the theme, and the multi-language is not yet open
 
 ### ThemeChanged() function is to connect the signal when the user changes the theme
+
+# About the layout of the matbox. U need pay attention to the total_lay, which is the global layout.
+<img alt="" src="https://github.com/PythonnotJava/MTBOX/blob/matbox1.0.7/Layout-Show-Img/layout.png?raw=true"/>
