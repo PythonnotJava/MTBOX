@@ -3,6 +3,11 @@
 
 # 好了，不开玩笑了，请让我们进入主题吧
 
+# 哔哩哔哩演示地址 ： https://www.bilibili.com/video/BV12v4y1G7iD/?spm_id_from=333.999.0.0&vd_source=9ab64e93362442ee5ac84c1c2078f8e7
+
+# YouTube演示地址 ： https://youtu.be/hOW51iAL2eg
+
+
 # PyPi 链接 : https://pypi.org/project/matbox/1.0.7/
 
 # 快速安装
