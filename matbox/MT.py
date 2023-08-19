@@ -1,175 +1,193 @@
 import sys
-from collections.abc import Generator
-from pathlib import Path
-from PyQt5.QtWidgets import (QWidget,
-                             QPushButton,
-                             QVBoxLayout,
-                             QHBoxLayout,
-                             QLabel,
-                             QGroupBox,
-                             QTextEdit,
-                             QLineEdit,
-                             QSplitter,
-                             QApplication,
-                             QStackedWidget,
-                             QMessageBox,
-                             QSplitterHandle
-                             )
-from PyQt5.QtGui import QIcon, QCursor, QPixmap, QKeyEvent, QCloseEvent
+from typing import Generator, Callable
 from os import system
-from PyQt5.QtCore import Qt
+
+from PyQt5.QtWidgets import QVBoxLayout, QApplication, QStackedWidget, QHBoxLayout
+from PyQt5.QtGui import QIcon, QCursor, QPixmap, QKeyEvent, QCloseEvent
+from PyQt5.QtCore import Qt, QObject
 from qt_material import apply_stylesheet
-from matbox.Setting._load_or_dump_config import _load_yaml, _dump_new_cfg
-from matbox.TreeItems.basetree import BaseTree
-from matbox.CodeViewer.CodeViewer import ViewSeletedItemCodes
-from matbox.Setting.Settings import ReSetDiag
-from matbox.HomePage.mainface import ComingHome
 
-__author__ = "PythonnotJava"
-__version__ = "1.0.7"
+from Util import _load_yaml, _dump_new_cfg
+from TreeItems import BaseTree
+from CodeViewer import ViewSeletedItemCodes
+from Setting import ReSetDiag
+from HomePage import HomePage
+from Source import CFG, LOGO, CursorType, README_SVG, TUTORIAL_H5
+from OptComponent import *
 
-_path = Path(__file__).parent
 
-class MatTutorial(QWidget):
+# ------------------------------------------------------------------------------
+# MatBox V1.0.8 -- Since 2023.8.17
+# From version 1.0.8, my main but core work is to optimize coders.
+# I try to improve code readability and usage as much as possible
+# Also, starting from this release,
+# I'm going to focus on making this module an out-of-the-box file
+# layout container, not just a tutorial software
+# ------------------------------------------------------------------------------
+
+class CoreUI(ReWidget):
 
     def __init__(self, statement: bool = True):
-        super(MatTutorial, self).__init__()
+        super(CoreUI, self).__init__()
 
         # widgets
         # left frame and lay
-        self.left_listBox = BaseTree(statement)
-        self.runCode = QPushButton("Run the Code")
-        self.setting = QPushButton("Settings")
-        self.left_lay = QVBoxLayout()
-        self.left_line_lay = QHBoxLayout()
+        self.listBox = BaseTree(statement)
+        self.runCode = RePushButton()
+        self.setting = RePushButton()
+
+        self._leftLay = QVBoxLayout()
+        self._runAndSet = QHBoxLayout()
         self._set = ReSetDiag()
 
         # staring with v 1.0.7, add a homepage
-        self.homepage = ComingHome()
-        self.homepageState = QLabel("当前状态")
-        self.homepageButton = QPushButton("访问主页")
-        self.homepageLine = QHBoxLayout()
-        self.homepageLay = QVBoxLayout()
+        self.homepageButton = RePushButton()
+        self.homepage = HomePage()
+        self.homepageState = ReLabel()
+
+        self._statusLay = QHBoxLayout()
+        self._homepageLay = QVBoxLayout()
 
         # right frame and lay
-        self.right_editor = ViewSeletedItemCodes(statement)
-        self.right_tutorial_group = QGroupBox()
-        self.right_tutorial = QTextEdit()
-        self.right_lay = QVBoxLayout()
-        self.group_lay = QVBoxLayout()
-        self.title_show = QLineEdit("Code Example")
-        self.right_temp_widget_hp = QWidget()
-        self.right_temp_widget_org = QWidget()
+        self.codesViewer = ViewSeletedItemCodes(statement)
+        self.remakerGroup = ReGroupBox()
+        self.remarker = ReTextEdit()
+        self._rightLay = QVBoxLayout()
+        self._groupLay = QVBoxLayout()
+        self.codeTitle = ReLineEdit()
+        self._showHomePage = ReWidget()
+        self._showCodes = ReWidget()
 
         # mid splitter
-        self.mid_spliter = QSplitter()
+        self.midSplitter = ReSplitter()
 
         # main layout
-        self.total_lay = QVBoxLayout()
+        self._globalLay = QVBoxLayout()
 
         # config_datas
-        path = _path / "Source" / "cfg" / "config.yaml"
-        self._config_datas = _load_yaml(path)
+        self._config_datas = _load_yaml(CFG)
 
         # parameters for global using
         self._statement = statement
 
-        self.setUI()
-        self.load_optimization()
-        self.send_receive_signal()
+        self.__setUI()
+        self.__send_receive_signal()
 
-    def setUI(self):
-        # initialize window
-        self.setMinimumSize(*self._config_datas['Main']['sizes'])
-        self.setWindowTitle("Matplotlib-Tutorial")
-        QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
-        QApplication.setApplicationDisplayName("Version 1.0")
-        QApplication.setWindowIcon(QIcon(str(_path / 'Source' / 'img' / 'logo.ico')))
+    def __setUI(self):
+        ReAppication.setWidgets(
+            attribute=Qt.AA_EnableHighDpiScaling,
+            display_name="Version 1.0",
+            icon=QIcon(LOGO)
+        )
 
-        # homepage
-        self.homepageLine.addWidget(self.homepageState)
-        self.homepageLine.addWidget(self.homepageButton)
-        self.right_temp_widget_hp.setLayout(self.homepageLay)
-        self.homepageLay.addWidget(self.homepage)
+        self.setWidgets(
+            title="MatBox",
+            minWidth=self._config_datas['Main']['sizes'][0],
+            minHeight=self._config_datas['Main']['sizes'][1],
+            cursor=QCursor(QPixmap(CursorType.Working))
+        )
+
+        self.homepageButton.setWidgets(
+            text="访问主页中",
+            icon=QIcon(LOGO),
+            cursor=QCursor(QPixmap(CursorType.Link)),
+            function=self.__setCurRigthWidget
+        )
+
+        self.homepageState.setWidgets(
+            text="当前状态",
+            qss=self._config_datas['HomePage-Label']['style'],
+            cursor=QCursor(QPixmap(CursorType.Working))
+        )
+
+        self.remakerGroup.setWidgets(
+            layout=self._groupLay,
+            title="参数详解        Help : ① Ctrl+C=复制  ② Ctrl+V=粘贴 ③ Ctrl+X=剪切 ④ Ctrl+A=全选",
+            maxHeight=self._config_datas['QGroupBox']['max-height'],
+            qss=self._config_datas['QGroupBox']['style'],
+            cursor=QCursor(QPixmap(CursorType.Text))
+        )
+
+        self.runCode.setWidgets(
+            text="Run the Code",
+            cursor=QCursor(QPixmap(CursorType.Link)),
+            function=self._runCode
+        )
+
+        self.setting.setWidgets(
+            text="Settings",
+            cursor=QCursor(QPixmap(CursorType.Link)),
+            function=self._settings,
+            shortcuts="Ctrl+S",
+        )
+
+        self.codeTitle.setWidgets(
+            text="Code Example",
+            enable=False,
+            qss=self._config_datas['Title']['style'],
+            cursor=QCursor(QPixmap(CursorType.Working))
+        )
+
+        self.midSplitter.setWidgets(
+            widgets=[ReWidget(), QStackedWidget()],
+            sizes=self._config_datas['QSplitter']['sizes']
+        )
+
+        # starting with v 1.0.7 , right_face changed as a stackWidget
+        # type(self.midSplitter.widget(1)) == QStackedWidget
+        self.midSplitter.widget(0).setLayout(self._leftLay)
+        self.midSplitter.widget(1).addWidget(self._showHomePage)
+        self.midSplitter.widget(1).addWidget(self._showCodes)
+        self.midSplitter.handle(1).setMinimumWidth(10)
+        self.midSplitter.handle(1).setCursor(QCursor(QPixmap(CursorType.Move)))
 
         # set layouts
-        self.left_lay.addLayout(self.homepageLine)
-        self.left_lay.addWidget(self.left_listBox)
-        self.left_line_lay.addWidget(self.runCode)
-        self.left_line_lay.addWidget(self.setting)
-        self.left_lay.addLayout(self.left_line_lay)
+        self._runAndSet.addWidget(self.runCode, alignment=Qt.Alignment())
+        self._runAndSet.addWidget(self.setting, alignment=Qt.Alignment())
 
-        self.right_tutorial_group.setLayout(self.group_lay)
-        self.right_lay.addWidget(self.title_show)
-        self.right_lay.addWidget(self.right_editor)
-        self.right_lay.addWidget(self.right_tutorial_group)
-        self.group_lay.addWidget(self.right_tutorial)
-        self.right_temp_widget_org.setLayout(self.right_lay)
+        self._statusLay.addWidget(self.homepageState, alignment=Qt.Alignment())
+        self._statusLay.addWidget(self.homepageButton, alignment=Qt.Alignment())
+        self._showHomePage.setLayout(self._homepageLay)
+        self._homepageLay.addWidget(self.homepage, alignment=Qt.Alignment())
 
-        # set control properties
-        self.title_show.setContextMenuPolicy(Qt.NoContextMenu)
-        self.title_show.setEnabled(False)
+        self._leftLay.addLayout(self._statusLay)
+        self._leftLay.addWidget(self.listBox, alignment=Qt.Alignment())
+        self._leftLay.addLayout(self._runAndSet)
 
-        self.right_tutorial_group.setTitle(
-            "参数详解        Help : ① Ctrl+C=复制  ② Ctrl+V=粘贴 ③ Ctrl+X=剪切 ④ Ctrl+A=全选")
-        # The temporary setting parameter detailed interface is fixed
-        self.right_tutorial.setLineWrapMode(QTextEdit.NoWrap)
+        self._rightLay.addWidget(self.codeTitle, alignment=Qt.Alignment())
+        self._rightLay.addWidget(self.codesViewer, alignment=Qt.Alignment())
+        self._rightLay.addWidget(self.remakerGroup, alignment=Qt.Alignment())
+        self._groupLay.addWidget(self.remarker, alignment=Qt.Alignment())
+        self._showCodes.setLayout(self._rightLay)
 
-        self.mid_spliter.addWidget(QWidget())
-        self.mid_spliter.addWidget(QStackedWidget())
-        # starting with v 1.0.7 , right_face changed as a stackWidget
-        # type(self.mid_spliter.widget(1)) == QStackedWidget
-        self.mid_spliter.widget(0).setLayout(self.left_lay)
-        self.mid_spliter.widget(1).addWidget(self.right_temp_widget_hp)
-        self.mid_spliter.widget(1).addWidget(self.right_temp_widget_org)
-
-        self.mid_spliter.setSizes(self._config_datas['QSplitter']['sizes'])
-        self.total_lay.addWidget(self.mid_spliter)
-        self.setLayout(self.total_lay)
+        self._globalLay.addWidget(self.midSplitter, alignment=Qt.Alignment())
+        self.setLayout(self._globalLay)
 
         # theme
         apply_stylesheet(self, self._config_datas['Theme']['name'])
         apply_stylesheet(self._set, self._config_datas['Theme']['name'])
 
     # Triggered when the interface is actively changed and the left interface is clicked
-    def setCurRigthWidget(self):
-        get_index : QStackedWidget = self.mid_spliter.widget(1)
-        if get_index.currentIndex() == 0:
-            get_index.setCurrentIndex(1)
-            self.homepageButton.setText('使用功能')
+    def __setCurRigthWidget(self):
+        getIndex: QStackedWidget = self.midSplitter.widget(1)
+        if getIndex.currentIndex() == 0:
+            getIndex.setCurrentIndex(1)
+            self.homepageButton.setText('使用功能中')
         else:
-            get_index.setCurrentIndex(0)
-            self.homepageButton.setText('访问主页')
-
-    # UI beautification
-    def load_optimization(self):
-        self.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'working.cur'))))
-        handle: QSplitterHandle = self.mid_spliter.handle(1)
-        handle.setMinimumWidth(10)
-        handle.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'move.cur'))))
-        self.runCode.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'link.cur'))))
-        self.setting.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'link.cur'))))
-        self.right_editor.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'text.cur'))))
-        self.homepageButton.setIcon(QIcon(str(_path / 'Source' / 'img' / 'logo.ico')))
-        self.right_tutorial_group.setMaximumHeight(self._config_datas['QGroupBox']['max-height'])
-        self.homepageButton.setCursor(QCursor(QPixmap(str(_path / 'Source' / 'mouseCursor' / 'link.cur'))))
-        # default settinds, but you can change it in mtml-file now!
-        self.title_show.setStyleSheet(self._config_datas['Title']['style'])
-        self.right_tutorial_group.setStyleSheet(self._config_datas['QGroupBox']['style'])
-        self.right_editor.setStyleSheet(self._config_datas['Editor']['style'])
-        self.homepageState.setStyleSheet(self._config_datas['HomePage-Label']['style'])
+            getIndex.setCurrentIndex(0)
+            self.homepageButton.setText('访问主页中')
 
     # run code function -- which is connected with the button runCode
     def _runCode(self):
         # When clicking on the run-button, jump immediately
-        self.mid_spliter.widget(1).setCurrentIndex(1)
-        self.homepageButton.setText("使用功能")
+        self.midSplitter.widget(1).setCurrentIndex(1)
+        self.homepageButton.setText("使用功能中")
         try:
-            exec(self.right_editor.toPlainText(), globals())
+            exec(self.codesViewer.toPlainText(), globals())
             print("SUC")
         except Exception as e:
-            print(self.right_editor.toPlainText())
-            QMessageBox.warning(self, 'Error', e.__str__(), QMessageBox.Ok)
+            print(self.codesViewer.toPlainText(), '\n % s' % str(e))
+            singleButtonMessageBox(self, 'Error', str(e), True)
 
     # refresh settings
     def _settings(self):
@@ -185,41 +203,46 @@ class MatTutorial(QWidget):
     # close event
     def closeEvent(self, a0: QCloseEvent):
         # When you close the main Ui firstly, the setting UI must also be closed
-        if self.close(): self._set.close()
-        _dump_new_cfg(_path / "Source" / "cfg" / "config.yaml", self._config_datas)
+        _dump_new_cfg(CFG, self._config_datas)
 
     # signal 、 functions 、shortcuts
-    def send_receive_signal(self):
-        self.left_listBox.selected_item.connect(self._setMtml)
-        self.runCode.clicked.connect(self._runCode)
-        self.setting.clicked.connect(self._settings)
-        self.homepageButton.clicked.connect(self.setCurRigthWidget)
-        self.setting.setShortcut("Ctrl+S")
+    def __send_receive_signal(self):
+        self.listBox.selected_item.connect(self._setMtml)
 
-    def _setMtml(self, itemName : str):
-        _func : Generator = self.right_editor.setMtml(itemName)
-        self.right_editor.setStyleSheet(_func.__next__())
-        self.right_tutorial.setStyleSheet(_func.__next__())
+    def _setMtml(self, itemName: str):
+        _func: Generator = self.codesViewer.setMtml(itemName)
+        self.codesViewer.setStyleSheet(_func.__next__())
+        self.remarker.setStyleSheet(_func.__next__())
         # Now, I'm not going to consider this list of dictionaries
-        self.right_tutorial.setText(_func.__next__().__str__())
+        self.remarker.setText(_func.__next__().__str__())
         # When clicking on the ribbon, jump immediately
         self.homepageButton.setText("使用功能")
-        self.mid_spliter.widget(1).setCurrentIndex(1)
+        self.midSplitter.widget(1).setCurrentIndex(1)
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         if event.key() == Qt.Key_F5:
-            system(str(_path / 'Source' / 'h5' / 'readme.svg'))
+            system(README_SVG)
         elif event.modifiers() == (Qt.ControlModifier | Qt.ShiftModifier) and event.key() == Qt.Key_Z:
-            system(str(_path / 'Source' / 'h5' / 'tutorial.html'))
-        else :
+            system(TUTORIAL_H5)
+        else:
             super().keyPressEvent(event)
 
+    # Allow users to customize card content
+    def setCard(self, **kwargs) -> None:
+        self._set.card.setWidgets(**kwargs)
+
+    # Allow users to operate some core controls.
+    # This function is still under study and is currently in the idea stage
+    @staticmethod
+    def resetWidget(widget : QObject, func : Callable, **kwargs):
+        func(widget, **kwargs)
+
 # an example for beginners who use it for the first time
-def main(statement=True):
+def example(statement=True):
     app = QApplication(sys.argv)
-    ui = MatTutorial(statement)
+    ui = CoreUI(statement)
     ui.show()
     sys.exit(app.exec())
 
 if __name__ == '__main__':
-    main()
+    example()

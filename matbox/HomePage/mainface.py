@@ -1,32 +1,33 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
-from pathlib import Path
 
-_path = Path(__file__).parent
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QVBoxLayout, QApplication
+from PyQt5.QtWebEngineWidgets import QWebEngineSettings
+from PyQt5.QtGui import QPixmap, QCursor
 
-class ComingHome(QWidget):
-    def __init__(self):
-        super(ComingHome, self).__init__()
+from Source import MAIN_PAGE, CursorType
+from OptComponent import ReWebEngineView, ReWidget
 
-        self.webview = QWebEngineView()
+class HomePage(ReWidget):
+    def __init__(self, *args, **kwargs):
+        super(HomePage, self).__init__(*args, **kwargs)
+
+        self.webview = ReWebEngineView()
         self.webview.settings().setAttribute(QWebEngineSettings.ShowScrollBars, False)
         self.lay = QVBoxLayout(self)
 
         self.setUI()
 
-
     def setUI(self):
-
-        path = _path / "../" / "Source" / "h5" / "main.html"
-
-        self.webview.setHtml(open(path, 'r', encoding='U8').read())
-
-        self.lay.addWidget(self.webview)
+        self.webview.setWidgets(
+            html_file=MAIN_PAGE,
+            cursor=QCursor(QPixmap(CursorType.Working))
+        )
+        self.lay.addWidget(self.webview, alignment=Qt.Alignment())
         self.setLayout(self.lay)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ui = ComingHome()
+    ui = HomePage()
     ui.show()
     sys.exit(app.exec())
